@@ -1,8 +1,7 @@
 require_relative 'ova-command/plugin'
 #require 'vagrant'
-require_relative 'ova-command/command'
 
-Vagrant.commands.register(:ova){OvaCommand::Command}
+
 #module VagrantPlugins
 #	class Plugin < Vagrant.plugin("2")
 #		name "ova"
