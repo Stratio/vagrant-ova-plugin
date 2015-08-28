@@ -1,6 +1,6 @@
 module VagrantPlugins
   module OvaCommand
-    class Plugin < Vagrant.plugin(2)
+    class Plugin < Vagrant.plugin('2')
       name 'ova'
       description 'Stratio converter from vbox to vmware'
 
