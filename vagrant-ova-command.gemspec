@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.version       = "0.1.0"
   spec.authors       = ["Marcos"]
   spec.email         = ["mpenate@stratio.com"]
-  spec.description   = %q{Awesome custom command to do something not yet implemented}
+  spec.description   = %q{Converts vbox to vmware}
   spec.summary       = spec.description
   spec.homepage      = "http://stratio.com"
 
@@ -17,6 +17,4 @@ Gem::Specification.new do |spec|
   puts spec.executables
   spec.require_paths = Dir["lib/**/*"]
 
-  spec.add_development_dependency "bundler", "~> 1.3"
-  spec.add_development_dependency "rake"
 end
