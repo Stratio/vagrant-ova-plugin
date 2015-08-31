@@ -1,16 +1,12 @@
-require 'optparse'
-require File.dirname(__FILE__)+'/ovf_document'
-require 'openssl'
-require 'rexml/document'
-include REXML
+require "vagrant"
 
-module Vagrant
-  module Command
+module VagrantPlugins
+  module CommandOva
     class Plugin < Vagrant.plugin('2')
       name 'Ova'
       description 'Stratio converter from vbox to vmware'
 
-      command "ova" do
+      command("ova") do
         require_relative "command"
         Command
       end      

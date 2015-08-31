@@ -1,7 +1,7 @@
 require 'nokogiri'
 
 module VagrantPlugins
-  module CustomCommand
+  module CommandOva
   class OVFDocument < Nokogiri::XML::Document
     XMLNS = {
       'rasd' => "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_ResourceAllocationSettingData",

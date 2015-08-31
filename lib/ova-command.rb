@@ -1,5 +1,5 @@
 require_relative 'ova-command/plugin'
-#require 'vagrant'
+require 'vagrant'
 
 
 #module VagrantPlugins

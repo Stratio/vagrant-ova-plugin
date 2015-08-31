@@ -1,15 +1,20 @@
-require 'optparse'
-require File.dirname(__FILE__)+'/ovf_document'
-require 'openssl'
-require 'rexml/document'
-include REXML
+require_relative 'version'
+require 'vagrant'
+#require Vagrant.source_root.join('plugins/commands/up/start_mixins')
 
 module VagrantPlugins
-  module CommandOva     
-    class Command < Vagrant.plugin("2", :command)
-      def self.synopsis
-        "Custom command to convert from vagrant vbox machines to vmware machines"
+  module VagrantOva
+    class Plugin < Vagrant.plugin('2')
+      name 'vagrant-ova'
+
+      command("ova") do
+        Command
       end
+    end
+
+    class Command < Vagrant.plugin(2, :command)
+      #include VagrantPlugins::CommandUp::StartMixins
+
       def execute
         options = {}
         opts = OptionParser.new do |opts|
@@ -48,7 +53,8 @@ module VagrantPlugins
         stratio_module_version = doc.root.elements['version'].text
         #TODO change system 
         system("tar cfv #{argv[0]}-#{stratio_module_version }.ova #{argv[0]}.ovf #{argv[0]}-disk1.vmdk #{argv[0]}.mf Vagrantfile")
-      end        
+        exit 0
+      end   
     end
   end
 end
