@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.description   = %q{Vagrant .box to .ova converter}
   spec.summary       = spec.description
   spec.homepage      = "https://github.com/Stratio/vagrant-ova-plugin"
-  spec.license       = "MIT"
+  spec.license       = "Apache-2.0"
 
   spec.files         = `git ls-files`.split($/)
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
