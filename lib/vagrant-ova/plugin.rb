@@ -62,8 +62,7 @@ module VagrantPlugins
             
         stratio_module_version = doc.root.elements['version'].text
         puts "Forming your ova file: "+ argv[0]+"-"+stratio_module_version+".ova"
-        files = [ argv[0]+'.ovf', argv[0]+'-disk1.vmdk', argv[0]+'.mf', 'Vagrantfile']
-        puts "Forming your ova file: "
+        files = [ argv[0]+'.ovf', argv[0]+'-disk1.vmdk', argv[0]+'.mf', 'Vagrantfile']      
           
         File.open(argv[0]+"-"+stratio_module_version+".ova", 'wb') do |f|
           Archive::Tar::Minitar::Writer.open(f) do |w|
