@@ -1,8 +1,8 @@
-# vagrant-ova-plugin
+# Vagrant OVA Plugin
 Vagrant plugin that exports a box from vbox to vmwware
 
-INSTALL:
+##Install
 $ vagrant plugin install vagrant-ova-plugin-0.1.0.gem
 
-USE:
+##Use
 $ vagrant ova [$yourbox-vbox-name]
