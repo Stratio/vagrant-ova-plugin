@@ -5,8 +5,12 @@ require 'openssl'
 require 'optparse'
 require 'rexml/document'
 require 'archive/tar/minitar'
+require 'benchmark'
+require 'log4r'
+
 include REXML
 include Archive::Tar
+include Log4r
 
 
 
@@ -28,20 +32,25 @@ module VagrantPlugins
           opts.banner = "Usage: vagrant ova [vm-name]"
         end
 
+        mylog = Logger.new ':'
+        mylog.outputters = Outputter.stdout        
         argv = parse_options(opts) 
         box_ovf = argv[0]+'.ovf'                
         vagrant_file = 'Vagrantfile'
         box_mf = argv[0]+'.mf'
         box_disk1 = argv[0]+'-disk1.vmdk'
-
-
-      
-        puts "Exporting VM...It only takes a couple of minutes"
-        mach = @env.machine(:default, :virtualbox)        
-        mach.provider.driver.export(box_ovf)
         
+                  
+        if File.exist?(box_ovf)
+          mylog.warn box_ovf+" already exists. Skipping its generation...";
+        else          
 
-        puts "Translating OVF document ..."
+          mach = @env.machine(:default, :virtualbox)                        
+          mylog.info "Exporting VM, it takes around 2 minutes ..."                        
+          mach.provider.driver.export(box_ovf)                    
+        end
+
+        mylog.info "Translating OVF document ..."
         doc = OVFDocument.parse(File.new(box_ovf), &:noblanks)
         doc.add_file(:href => 'Vagrantfile')
         doc.add_vmware_support
@@ -59,7 +68,7 @@ module VagrantPlugins
         doc = Document.new(file)
             
         stratio_module_version = doc.root.elements['version'].text
-        puts "Forming your ova file: "+ argv[0]+"-"+stratio_module_version+".ova ..."
+        mylog.info "Forming your ova file: "+ argv[0]+"-"+stratio_module_version+".ova ..."
         files = [ argv[0]+'.ovf', argv[0]+'-disk1.vmdk', argv[0]+'.mf', 'Vagrantfile']      
           
         File.open(argv[0]+"-"+stratio_module_version+".ova", 'wb') do |f|
