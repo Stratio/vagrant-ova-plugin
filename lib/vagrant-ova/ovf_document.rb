@@ -1,7 +1,7 @@
 require 'nokogiri'
 
 module VagrantPlugins
-  module CommandOva
+  module VagrantOva
   class OVFDocument < Nokogiri::XML::Document
     XMLNS = {
       'rasd' => "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_ResourceAllocationSettingData",
@@ -11,10 +11,7 @@ module VagrantPlugins
       'xsi' => "http://www.w3.org/2001/XMLSchema-instance",
       'vbox' => "http://www.virtualbox.org/ovf/machine"
     }
-
-    # Insert a new file with the given attributes
-    # :href :: filename of the file
-    # :id :: identifier inside the OVF
+    
     def add_file(attrs)
       return if search("//ovf:References/ovf:File[@ovf:href='#{attrs[:href]}']").count == 1
       file = Nokogiri::XML::Node.new 'File', self
