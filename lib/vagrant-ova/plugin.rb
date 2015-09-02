@@ -7,12 +7,11 @@ require 'rexml/document'
 require 'archive/tar/minitar'
 require 'benchmark'
 require 'log4r'
+require 'open3'
 
 include REXML
 include Archive::Tar
 include Log4r
-
-
 
 module VagrantPlugins
   module VagrantOva
@@ -25,8 +24,8 @@ module VagrantPlugins
     end
 
     class Command < Vagrant.plugin(2, :command)
-
       def execute
+
         options = {}
         opts = OptionParser.new do |opts|
           opts.banner = "Usage: vagrant ova [vm-name]"
@@ -39,15 +38,27 @@ module VagrantPlugins
         vagrant_file = 'Vagrantfile'
         box_mf = argv[0]+'.mf'
         box_disk1 = argv[0]+'-disk1.vmdk'
+        mach = @env.machine(:default, :virtualbox)          
         
-                  
+
         if File.exist?(box_ovf)
           mylog.warn box_ovf+" already exists. Skipping its generation...";
-        else          
-
-          mach = @env.machine(:default, :virtualbox)                        
-          mylog.info "Exporting VM, it takes around 2 minutes ..."                        
-          mach.provider.driver.export(box_ovf)                    
+        else 
+          if mach.provider.driver.read_state.to_s.eql?"running"
+            mylog.warn box_ovf+" is being up, halting it..."
+            mach.provider.driver.halt                   
+          end
+          mf = mach.provider.driver.read_machine_folder+"/"+argv[0]  
+          vmdkf = ""      
+          Find.find(mf) do |path|
+            vmdkf = path if path =~ /.*\.vmdk$/
+          end          
+          ##Size to MB and time to secs.
+          disksize =  File.size(vmdkf)/ 1024.0 / 1024.0                 
+          timeto = disksize* 0.0005*60                  
+          mylog.info "Disk size: " + disksize.round(2).to_s + "MB ..."                                
+          mylog.info "Exporting VM, it will take around "+timeto.round(0).to_s+" seconds ..."          
+          mach.provider.driver.export(box_ovf)          
         end
 
         mylog.info "Translating OVF document ..."
@@ -87,11 +98,7 @@ module VagrantPlugins
             end
           end
         end
-
-
-
         exit 0      
-        
       end   
     end
   end
