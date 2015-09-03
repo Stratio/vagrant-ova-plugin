@@ -5,9 +5,8 @@ require 'openssl'
 require 'optparse'
 require 'rexml/document'
 require 'archive/tar/minitar'
-require 'benchmark'
 require 'log4r'
-require 'open3'
+
 
 include REXML
 include Archive::Tar
@@ -82,7 +81,7 @@ module VagrantPlugins
         mylog.info "Forming your ova file: "+ argv[0]+"-"+stratio_module_version+".ova ..."
         files = [ argv[0]+'.ovf', argv[0]+'-disk1.vmdk', argv[0]+'.mf', 'Vagrantfile']      
           
-        File.open(argv[0]+"-"+stratio_module_version+".ova", 'wb') do |f|
+        File.open(argv[0]+".ova", 'wb') do |f|
           Archive::Tar::Minitar::Writer.open(f) do |w|
             w.add_file(files[0],:mode => 0664, :mntime => Time.now) do |stream, io|
               open(files[0], "rb"){|f| stream.write(f.read)} 
