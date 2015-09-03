@@ -78,7 +78,7 @@ module VagrantPlugins
         doc = Document.new(file)
             
         stratio_module_version = doc.root.elements['version'].text
-        mylog.info "Forming your ova file: "+ argv[0]+"-"+stratio_module_version+".ova ..."
+        mylog.info "Forming your ova file: "+ argv[0]+".ova ..."
         files = [ argv[0]+'.ovf', argv[0]+'-disk1.vmdk', argv[0]+'.mf', 'Vagrantfile']      
           
         File.open(argv[0]+".ova", 'wb') do |f|
