@@ -27,19 +27,27 @@ module VagrantPlugins
 
         options = {}
         opts = OptionParser.new do |opts|
-          opts.banner = "Usage: vagrant ova [output-name]"
+          opts.banner = "Usage: vagrant ova --output example.ova"
+          opts.separator " "
+          opts.on("--output", "Set output name")
         end
         machname = @env.machine(:default, :virtualbox).box.name        
         mylog = Logger.new ':'
         mylog.outputters = Outputter.stdout        
         argv = parse_options(opts) 
+
+        if !argv[0]
+          puts argv[0]
+          mylog.error "--output parameter expected\nexample: vagrant ova exaple.ovf"
+          exit
+        end
         box_ovf = machname+'.ovf'                
         vagrant_file = 'Vagrantfile'
         box_mf = machname+'.mf'
         box_disk1 = machname+'-disk1.vmdk'
         mach = @env.machine(:default, :virtualbox)          
         
-
+        
         if File.exist?(box_ovf)
           mylog.warn box_ovf+" already exists. Skipping its generation...";
         else 
@@ -78,10 +86,10 @@ module VagrantPlugins
         doc = Document.new(file)
             
         stratio_module_version = doc.root.elements['version'].text
-        mylog.info "Forming your ova file: "+ argv[0]+".ova ..."
+        mylog.info "Forming your ova file: "+ argv[0]+" ..."
         files = [ machname+'.ovf', machname+'-disk1.vmdk', machname+'.mf', 'Vagrantfile']      
           
-        File.open(argv[0]+".ova", 'wb') do |f|
+        File.open(argv[0], 'wb') do |f|
           Archive::Tar::Minitar::Writer.open(f) do |w|
             w.add_file(files[0],:mode => 0664, :mntime => Time.now) do |stream, io|
               open(files[0], "rb"){|f| stream.write(f.read)} 
