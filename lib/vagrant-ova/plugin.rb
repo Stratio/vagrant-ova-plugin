@@ -27,16 +27,16 @@ module VagrantPlugins
 
         options = {}
         opts = OptionParser.new do |opts|
-          opts.banner = "Usage: vagrant ova [vm-name]"
+          opts.banner = "Usage: vagrant ova [output-name]"
         end
-
+        machname = @env.machine(:default, :virtualbox).box.name        
         mylog = Logger.new ':'
         mylog.outputters = Outputter.stdout        
         argv = parse_options(opts) 
-        box_ovf = argv[0]+'.ovf'                
+        box_ovf = machname+'.ovf'                
         vagrant_file = 'Vagrantfile'
-        box_mf = argv[0]+'.mf'
-        box_disk1 = argv[0]+'-disk1.vmdk'
+        box_mf = machname+'.mf'
+        box_disk1 = machname+'-disk1.vmdk'
         mach = @env.machine(:default, :virtualbox)          
         
 
@@ -47,7 +47,7 @@ module VagrantPlugins
             mylog.warn box_ovf+" is being up, halting it..."
             mach.provider.driver.halt                   
           end
-          mf = mach.provider.driver.read_machine_folder+"/"+argv[0]  
+          mf = mach.provider.driver.read_machine_folder+"/"+machname  
           vmdkf = ""      
           Find.find(mf) do |path|
             vmdkf = path if path =~ /.*\.vmdk$/
@@ -79,7 +79,7 @@ module VagrantPlugins
             
         stratio_module_version = doc.root.elements['version'].text
         mylog.info "Forming your ova file: "+ argv[0]+".ova ..."
-        files = [ argv[0]+'.ovf', argv[0]+'-disk1.vmdk', argv[0]+'.mf', 'Vagrantfile']      
+        files = [ machname+'.ovf', machname+'-disk1.vmdk', machname+'.mf', 'Vagrantfile']      
           
         File.open(argv[0]+".ova", 'wb') do |f|
           Archive::Tar::Minitar::Writer.open(f) do |w|
