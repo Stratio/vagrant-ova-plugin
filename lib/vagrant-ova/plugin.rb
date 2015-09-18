@@ -77,8 +77,8 @@ module VagrantPlugins
         vagrant_file_sha1 = OpenSSL::Digest::SHA1.hexdigest(File.read(vagrant_file))
         box_disk1_sha1 = OpenSSL::Digest::SHA1.hexdigest(File.read(box_disk1))
         File.open(box_mf, 'w') do |f|
-          f.write("SHA1 (box.ovf)= #{box_ovf_sha1}\n")
-          f.write("SHA1 (box-disk1.vmdk)= #{box_disk1_sha1}\n")
+          f.write("SHA1 (#{machname}.ovf)= #{box_ovf_sha1}\n")
+          f.write("SHA1 (#{machname}-disk1.vmdk)= #{box_disk1_sha1}\n")
           f.write("SHA1 (Vagrantfile)= #{vagrant_file_sha1}")
         end
         
