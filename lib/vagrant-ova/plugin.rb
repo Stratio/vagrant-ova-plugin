@@ -87,7 +87,7 @@ module VagrantPlugins
             
         stratio_module_version = doc.root.elements['version'].text
         mylog.info "Forming your ova file: "+ argv[0]+" ..."
-        files = [ machname+'.ovf', machname+'-disk1.vmdk', machname+'.mf', 'Vagrantfile']      
+        files = [ machname+'.ovf', machname+'-disk1.vmdk', 'Vagrantfile']      
           
         File.open(argv[0], 'wb') do |f|
           Archive::Tar::Minitar::Writer.open(f) do |w|
@@ -99,9 +99,6 @@ module VagrantPlugins
             end
             w.add_file(files[2],:mode => 0664, :mntime => Time.now) do |stream, io|
               open(files[2], "rb"){|f| stream.write(f.read)}
-            end
-            w.add_file(files[3],:mode => 0664, :mntime => Time.now) do |stream, io|
-              open(files[3], "rb"){|f| stream.write(f.read)}
             end
           end
         end
