@@ -81,11 +81,7 @@ module VagrantPlugins
           f.write("SHA1 (#{machname}-disk1.vmdk)= #{box_disk1_sha1}\n")
           f.write("SHA1 (Vagrantfile)= #{vagrant_file_sha1}")
         end
-        
-        file = File.new("../pom.xml")
-        doc = Document.new(file)
             
-        stratio_module_version = doc.root.elements['version'].text
         mylog.info "Forming your ova file: "+ argv[0]+" ..."
         files = [ machname+'.ovf', machname+'-disk1.vmdk', 'Vagrantfile']      
           
